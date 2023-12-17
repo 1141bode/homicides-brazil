@@ -1,0 +1,139 @@
+### HOMICIDES IN BRAZIL, 2021, IPEA Atlas da Violência  
+
+library(rgho)
+library(tidyverse)
+library(sf)
+library(geobr)
+library(grid)
+library(rnaturalearth)
+library(dplyr)
+
+## total homicides 
+
+datatotal <- read_xlsx("taxa-homicidios-2021-01-15-2021-01-15 (1).xlsx")
+
+shp_br <- read_state()
+
+merged_data <- left_join(datatotal, shp_br, by = c("nome" = "abbrev_state"))
+
+
+merged_sf_total <- st_as_sf(merged_data, crs = 4326)
+
+
+ggplot() +
+  geom_sf(data = merged_sf_total, aes(fill = valor)) +
+  scale_fill_gradientn(colors = c("#f89f5b", "#e6746b", "#cb4978", "#9a3678", "#6b2568", "#3f1651"), 
+                       na.value = "grey50", 
+                       guide = guide_colorbar(title = "Homicide Rate")) +
+  theme_void() +
+  theme(
+    plot.title = element_text(
+      family = "serif",
+      face = "bold",
+      size = 16,
+      hjust = 0.5
+    ),
+    plot.subtitle = element_text(
+      family = "serif",
+      face = "bold",
+      size = 14,
+      hjust = 0.5
+    )
+  ) +
+  labs(title = "Homicides in Brazil (2021)",
+       caption = "Source: IPEA Atlas da Violência 
+       Made by Ana Bodevan",
+       subtitle = "per 100 thousand people")
+
+## youth homicide 
+
+data_jovens <- read_xlsx("taxa-de-homicidios-de-jovens-2021-01-15-2021-01-15.xlsx")
+merged_datajov <- left_join(data_jovens, shp_br, by = c("nome" = "abbrev_state"))
+
+merged_sf_totaljov <- st_as_sf(merged_data, crs = 4326)
+
+ggplot() +
+  geom_sf(data = merged_sf_total, aes(fill = valor)) +
+  scale_fill_gradientn(colors = c("#f89f5b", "#e6746b", "#cb4978", "#9a3678", "#6b2568", "#3f1651"), 
+                       na.value = "grey50", 
+                       guide = guide_colorbar(title = "Youth Homicide Rate")) +
+  theme_void() +
+  theme(
+    plot.title = element_text(
+      family = "serif",
+      face = "bold",
+      size = 16,
+      hjust = 0.5
+    ),
+    plot.subtitle = element_text(
+      family = "serif",
+      face = "bold",
+      size = 14,
+      hjust = 0.5
+    )
+  ) +
+  labs(title = "Youth Homicides in Brazil (2021)",
+       caption = "Source: IPEA Atlas da Violência 
+       Made by Ana Bodevan",
+       subtitle = "per 100 thousand people")
+
+## homicide of black people 
+
+data_negros <- read_xlsx("C:taxa-de-homicidios-negros-2021-01-15-2021-01-15.xlsx")
+merged_datan <- left_join(data_negros, shp_br, by = c("nome" = "abbrev_state"))
+merged_sf_totaln <- st_as_sf(merged_data, crs = 4326)
+ggplot() +
+  geom_sf(data = merged_sf_total, aes(fill = valor)) +
+  scale_fill_gradientn(colors = c("#f89f5b", "#e6746b", "#cb4978", "#9a3678", "#6b2568", "#3f1651"), 
+                       na.value = "grey50", 
+                       guide = guide_colorbar(title = "Black Homicide Rate")) +
+  theme_void() +
+  theme(
+    plot.title = element_text(
+      family = "serif",
+      face = "bold",
+      size = 16,
+      hjust = 0.5
+    ),
+    plot.subtitle = element_text(
+      family = "serif",
+      face = "bold",
+      size = 14,
+      hjust = 0.5
+    )
+  ) +
+  labs(title = "Black Homicides Victims in Brazil (2021)",
+       caption = "Source: IPEA Atlas da Violência 
+       Made by Ana Bodevan",
+       subtitle = "per 100 thousand people")
+
+## homicide of non-black people 
+
+data_nn <- read_xlsx("taxa-de-homicidios-nao-negros-2021-01-15-2021-01-15.xlsx")
+merged_datann <- left_join(data_nn, shp_br, by = c("nome" = "abbrev_state"))
+merged_sf_totalnn <- st_as_sf(merged_data, crs = 4326)
+ggplot() +
+  geom_sf(data = merged_sf_total, aes(fill = valor)) +
+  scale_fill_gradientn(colors = c("#f89f5b", "#e6746b", "#cb4978", "#9a3678", "#6b2568", "#3f1651"), 
+                       na.value = "grey50", 
+                       guide = guide_colorbar(title = "Non-Black Homicide Rate")) +
+  theme_void() +
+  theme(
+    plot.title = element_text(
+      family = "serif",
+      face = "bold",
+      size = 16,
+      hjust = 0.5
+    ),
+    plot.subtitle = element_text(
+      family = "serif",
+      face = "bold",
+      size = 14,
+      hjust = 0.5
+    )
+  ) +
+  labs(title = "Non-Black Homicides Victims in Brazil (2021)",
+       caption = "Source: IPEA Atlas da Violência 
+       Made by Ana Bodevan",
+       subtitle = "per 100 thousand people")
+
